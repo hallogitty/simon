@@ -17,6 +17,8 @@ $(document).keypress(function(evt){
   if(gameOverFlag === true){
     gameOverFlag = false;
     $("h1").text("LET THE GAME BEGIN");
+    allowPlayerInput = true;
+    changeInputPermission();
     startGameLoop();
   }
 });
@@ -51,10 +53,10 @@ function gameOver(){
 //PLAYER INPUT BEGIN
 //
 function storePlayerInput(buttonNr){
-  console.log("allow player input = " + allowPlayerInput);
+  //console.log("allow player input = " + allowPlayerInput);
   if(allowPlayerInput){
     playerInputIs.push(buttonNr);
-    console.log("pushed to playerInputIs: " + buttonNr );
+    //console.log("pushed to playerInputIs: " + buttonNr );
     checkPlayerInputIsCorrect();
   }
 }
@@ -62,20 +64,37 @@ function storePlayerInput(buttonNr){
 function checkPlayerInputIsCorrect(){
   var userShouldStepSlice = playerInputShould.slice(0,playerInputIs.length);
   if(JSON.stringify(playerInputIs) == JSON.stringify(userShouldStepSlice)){
-    console.log("user is correct: " + JSON.stringify(playerInputIs) + " = " + JSON.stringify(userShouldStepSlice));
+    //console.log("user is correct: " + JSON.stringify(playerInputIs) + " = " + JSON.stringify(userShouldStepSlice));
     if(playerInputIs.length == playerInputShould.length){
-      allowPlayerInput = false;
+      changeInputPermission();
       setTimeout(function(){
         prepareNextRound();
         startGameLoop();
       }, 1000);
     }
   }else{
-    console.log("user error: " + JSON.stringify(playerInputIs) + " = " + JSON.stringify(userShouldStepSlice));
-    allowPlayerInput = false;
+    //console.log("user error: " + JSON.stringify(playerInputIs) + " = " + JSON.stringify(userShouldStepSlice));
+    changeInputPermission();
     gameOver();
   }
 }
+
+function changeInputPermission(){
+  if(allowPlayerInput){
+    //console.log("changed classes: " + $("h1").Class())
+    allowPlayerInput = false;
+    $("h1").text("Watch and learn");
+    $("h1").addClass("noPlayerInputAllowed");
+    $("h1").removeClass("playerInputAllowed");
+  }
+  else{
+    $("h1").text("Repeat or die");
+    allowPlayerInput = true;
+    $("h1").addClass("playerInputAllowed");
+    $("h1").removeClass("noPlayerInputAllowed");
+  }
+}
+
 //
 //PLAYER INPUT END
 //
@@ -111,7 +130,7 @@ function playButtonsSounds(){
     }, 1000 * i);
   }
   setTimeout(function(){
-    allowPlayerInput = true;
+    changeInputPermission()
   }, 1000 * soundListLength)
 }
 
