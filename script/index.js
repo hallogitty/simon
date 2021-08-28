@@ -1,12 +1,18 @@
+//todo add wigle on playerInputIs
+//graphic upgrade: scenario, fonts, gentle background pattern, design trends 2021
+//funktionen in einem graph mit copy paste einfügen um struktur schnell und visuell zu erstellen
+
 
 
 
 var gameOverFlag = true;
-var buttons = ["gameButton1", "gameButton2", "gameButton3", "gameButton4"];
 var playerInputShould = [];
 var playerInputIs = [];
 var allowPlayerInput = false;
-//start the game
+
+//
+//GAME LOGIC FUNCTIONS BEGIN
+//
 $(document).keypress(function(evt){
   if(gameOverFlag === true){
     gameOverFlag = false;
@@ -15,32 +21,69 @@ $(document).keypress(function(evt){
   }
 });
 
-//event listeners
-$("#gameButton1").click(function(){
-  playSound(0);
-  storePlayerInput(0);
-});
+function startGameLoop(){
+  var nextButton = getRandomButton()
+  playerInputShould.push(nextButton);
+  playButtonsSounds();
+}
 
-$("#gameButton2").click(function(){
-  playSound(1);
-  storePlayerInput(1);
-});
+function prepareNextRound(){
+  playerInputIs.length = 0;
+}
 
-$("#gameButton3").click(function(){
-  playSound(2);
-  storePlayerInput(2);
-});
+function getRandomButton(){
+  var randnum = Math.floor(Math.random()*4);
+  //console.log(randnum);
+  return randnum;
+}
 
-$("#gameButton4").click(function(){
-  playSound(3);
-  storePlayerInput(3);
-});
+function gameOver(){
+  playerInputShould.length = 0;
+  playerInputIs.length = 0;
+  $("h1").text("QQ oh dear game over, push any key to restart QQ");
+  gameOverFlag = true;
+}
+//
+//GAME LOGIC FUNCTIONS END
+//
 
 //
-//sound functions
+//PLAYER INPUT BEGIN
+//
+function storePlayerInput(buttonNr){
+  console.log("allow player input = " + allowPlayerInput);
+  if(allowPlayerInput){
+    playerInputIs.push(buttonNr);
+    console.log("pushed to playerInputIs: " + buttonNr );
+    checkPlayerInputIsCorrect();
+  }
+}
+
+function checkPlayerInputIsCorrect(){
+  var userShouldStepSlice = playerInputShould.slice(0,playerInputIs.length);
+  if(JSON.stringify(playerInputIs) == JSON.stringify(userShouldStepSlice)){
+    console.log("user is correct: " + JSON.stringify(playerInputIs) + " = " + JSON.stringify(userShouldStepSlice));
+    if(playerInputIs.length == playerInputShould.length){
+      allowPlayerInput = false;
+      setTimeout(function(){
+        prepareNextRound();
+        startGameLoop();
+      }, 1000);
+    }
+  }else{
+    console.log("user error: " + JSON.stringify(playerInputIs) + " = " + JSON.stringify(userShouldStepSlice));
+    allowPlayerInput = false;
+    gameOver();
+  }
+}
+//
+//PLAYER INPUT END
+//
+
+//
+//ANIMATIONS AND SOUND BEGIN
 //
 function playSound(button){
-  //console.log("playSound button is: " + button);
   if(button == "0"){
     var sound1 = new Audio("sound/tom-1.mp3");
     sound1.play();
@@ -60,31 +103,20 @@ function playSound(button){
 }
 
 function playButtonsSounds(){
-
   var soundListLength = playerInputShould.length;
   for(let i = 0; i < soundListLength; i++){
-    //console.log("1 -> i: " + i + ", list[i]: " + playerInputShould[i]);
     setTimeout(function(){
        playSound(playerInputShould[i]);
        klickAnim(playerInputShould[i]);
-       //console.log("2 -> i: " + i + ", list[i]: " + playerInputShould[i]);
-       //console.log("play this sound: " + playerInputShould[i]);
     }, 1000 * i);
   }
   setTimeout(function(){
     allowPlayerInput = true;
   }, 1000 * soundListLength)
-  //playerInputShould.forEach(element => {
-  //  console.log("element = " + element);
-  //  playSound(element);
-  //});
-
 }
 
 function klickAnim(button){
-
   if(button == "0"){
-    //$("#gameButton1").animate({width: '+=100px;', height: '+=100px;'});
     $("#gameButton1").animate({opacity: "0.1"});
     $("#gameButton1").animate({opacity: "1.0"});
   }
@@ -100,59 +132,37 @@ function klickAnim(button){
     $("#gameButton4").animate({opacity: "0.1"});
     $("#gameButton4").animate({opacity: "1.0"});
   }
-
 }
+//
+//ANIMATIONS AND SOUND END
+//
 
-function startGameLoop(){
-  var nextButton = getRandomButton()
-  playerInputShould.push(nextButton);
-  playButtonsSounds();
-  //set the user input flag after callback from length array timed empty jquery animation
-  //console.log("player should: " + playerInputShould);
-}
+//
+//EVENT LISTENERS BEGIN
+//
+$("#gameButton1").click(function(){
+  playSound(0);
+  storePlayerInput(0);
+});
 
-function prepareNextRound(){
-  playerInputIs.length = 0;
-}
+$("#gameButton2").click(function(){
+  playSound(1);
+  storePlayerInput(1);
+});
 
-function gameOver(){
-  playerInputShould.length = 0;
-  playerInputIs.length = 0;
-  $("h1").text("QQ oh dear game over, push any key to restart QQ");
-  gameOverFlag = true;
-}
+$("#gameButton3").click(function(){
+  playSound(2);
+  storePlayerInput(2);
+});
 
-function storePlayerInput(buttonNr){
-  console.log("allow player input = " + allowPlayerInput);
-  if(allowPlayerInput){
-    playerInputIs.push(buttonNr);
-    console.log("pushed to playerInputIs: " + buttonNr );
-    checkPlayerInputIsCorrect();
-  }
-}
+$("#gameButton4").click(function(){
+  playSound(3);
+  storePlayerInput(3);
+});
+//
+//EVENT LISTENERS END
+//
 
-function checkPlayerInputIsCorrect(){
-  console.log("before playerInputIs.lenght = " + playerInputIs.length);
-  var userShouldStepSlice = playerInputShould.slice(0,playerInputIs.length);
-  console.log("after playerInputIs.lenght = " + playerInputIs.length);
-  console.log("slice is = " + userShouldStepSlice);
-  if(JSON.stringify(playerInputIs) == JSON.stringify(userShouldStepSlice)){
-    console.log("user is correct: " + JSON.stringify(playerInputIs) + " = " + JSON.stringify(userShouldStepSlice));
-    prepareNextRound();
-    startGameLoop();
-  }else{
-    console.log("user error: " + JSON.stringify(playerInputIs) + " = " + JSON.stringify(userShouldStepSlice));
-    allowPlayerInput = false;
-    gameOver();
-  }
-
-}
-
-function getRandomButton(){
-  var randnum = Math.floor(Math.random()*4);
-  //console.log(randnum);
-  return randnum;
-}
 
 function sleep(milliseconds){
   const date = Date.now();

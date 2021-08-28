@@ -1,36 +1,46 @@
 body{
-  background-color: orange;
+  
 }
 
 h1{
   text-align: center;
 }
 
-
-
 .coloredBg1{
   background-color: red;
   width: 250px;
   height: 250px;
   margin: 20px;
+  border: 2px solid red;
+  border-radius: 20px;
+  background-image: url("../img/buttonBg1.png");
 }
 .coloredBg2{
   background-color: green;
   width: 250px;
   height: 250px;
   margin: 20px;
+  border: 2px solid red;
+  border-radius: 20px;
+  background-image: url("../img/buttonBg2.png");
 }
 .coloredBg3{
   background-color: blue;
   width: 250px;
   height: 250px;
   margin: 20px;
+  border: 2px solid red;
+  border-radius: 20px;
+  background-image: url("../img/buttonBg3.png");
 }
 .coloredBg4{
   background-color: yellow;
   width: 250px;
   height: 250px;
   margin: 20px;
+  border: 2px solid red;
+  border-radius: 20px;
+  background-image: url("../img/buttonBg4.png");
 }
 
 .framed{
