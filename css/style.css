@@ -1,0 +1,39 @@
+body{
+  background-color: orange;
+}
+
+h1{
+  text-align: center;
+}
+
+
+
+.coloredBg1{
+  background-color: red;
+  width: 250px;
+  height: 250px;
+  margin: 20px;
+}
+.coloredBg2{
+  background-color: green;
+  width: 250px;
+  height: 250px;
+  margin: 20px;
+}
+.coloredBg3{
+  background-color: blue;
+  width: 250px;
+  height: 250px;
+  margin: 20px;
+}
+.coloredBg4{
+  background-color: yellow;
+  width: 250px;
+  height: 250px;
+  margin: 20px;
+}
+
+.framed{
+  border: 5px;
+  border-color: black;
+}
